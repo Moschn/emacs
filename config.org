@@ -1,0 +1,90 @@
+# -*- mode: org; coding: utf-8; -*-
+#+TITLE Emacs Config
+#+STARTUP: indent
+
+This is my emacs config
+
+* Global Config
+Calender start at monday
+
+#+BEGIN_SRC emacs-lisp
+ (setq calendar-week-start-day 1)
+#+END_SRC
+
+Personally, I don't like the backup files Emacs is creating. This one
+disables them:
+
+#+BEGIN_SRC emacs-lisp
+ (setq backup-inhibited t)
+#+END_SRC
+
+Semantic minor mode
+#+BEGIN_SRC emacs-lisp
+(semantic-mode 1)
+#+END_SRC
+
+* Melpa
+#+BEGIN_SRC emacs-lisp
+(require 'package)
+(add-to-list 'package-archives
+             '("melpa" . "https://melpa.org/packages/") t)
+(package-initialize)
+#+END_SRC
+
+* Themes
+#+BEGIN_SRC emacs-lisp
+;;(require 'moe-theme)
+;;     (moe-dark)
+#+END_SRC
+#+BEGIN_SRC emacs-lisp
+ (load-theme 'wombat t)
+#+END_SRC
+
+* Org Mode
+Keymaps
+#+BEGIN_SRC emacs-lisp
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-switchb)
+#+END_SRC
+Config
+#+BEGIN_SRC emacs-lisp
+(setq org-startup-indented 'f)
+(setq org-src-fontify-natively 't)
+(setq src-tab-acts-natively t)
+(setq org-src-window-setup 'current-window)
+#+END_SRC
+
+* Flycheck
+Enable globally
+#+BEGIN_SRC emacs-lisp
+(add-hook 'after-init-hook #'global-flycheck-mode)
+#+END_SRC
+
+* Company
+Enable globally
+#+BEGIN_SRC emacs-lisp
+(add-hook 'after-init-hook 'global-company-mode)
+#+END_SRC
+* Rust
+** Flycheck
+#+BEGIN_SRC emacs-lisp
+(with-eval-after-load 'rust-mode
+      (add-hook 'flycheck-mode-hook #'flycheck-rust-setup))
+#+END_SRC
+** Autocomplete: Company
+Racer
+#+BEGIN_SRC emacs-lisp
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'eldoc-mode)
+#+END_SRC
+Company configuration
+#+BEGIN_SRC emacs-lisp
+(add-hook 'racer-mode-hook #'company-mode)
+
+(require 'rust-mode)
+(define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+(setq company-tooltip-align-annotations t)
+#+END_SRC
+
